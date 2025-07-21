@@ -1,9 +1,11 @@
 package com.aicodinator.backend.global.config;
 
+import com.aicodinator.backend.domain.user.service.CustomOAuth2UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,31 +20,53 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
+
+    private final CustomOAuth2UserService oAuth2UserService;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // csrf disable
-            .csrf(auth -> auth.disable())
+                // CSRF, form-login, http-basic 끄기
+                .csrf(csrf -> csrf.disable())
+                .formLogin(form -> form.disable())
+                .httpBasic(basic -> basic.disable())
 
-            // form 로그인 방식 disable
-            .formLogin(auth -> auth.disable())
+                // 인가 설정
+                .authorizeHttpRequests(auth -> auth
+                        // swagger, actuator 등 퍼밋
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/swagger-resources/**",
+                                "/webjars/**",
+                                "/actuator/health"
+                        ).permitAll()
+                        // OAuth2 로그인 시작 및 콜백 URL 퍼밋
+                        .requestMatchers(
+                                "/oauth2/authorization/**",
+                                "/login/oauth2/**"
+                        ).permitAll()
+                        // ADMIN API
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        // 그 외는 인증 필요
+                        .anyRequest().authenticated()
+                )
 
-            // http basic 인증 방식 disable
-            .httpBasic(auth -> auth.disable())
+                // OAuth2 로그인 설정
+                .oauth2Login(oauth2 -> oauth2
+                        // (선택) 커스텀 로그인 페이지를 쓴다면 지정
+                        // .loginPage("/login")
 
-            // 인가 처리
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("v3/api-docs/**",
-                    "/swagger-ui/**",
-                    "/swagger-ui.html",
-                    "/swagger-resources/**",
-                    "/webjars/**",
-                    "/actuator/health"
-                ).permitAll()
-                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
-            );
+                        // 소셜 로그인 후 사용자 정보 처리 서비스 연결
+                        .userInfoEndpoint(userInfo ->
+                                userInfo.userService(oAuth2UserService)
+                        )
+                        // 로그인 성공 시 리다이렉트 URL (true: 항상 리다이렉트)
+                        .defaultSuccessUrl("/dashboard", true)
+                );
 
-            return http.build();
+        return http.build();
     }
 }
+
