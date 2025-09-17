@@ -1,15 +1,10 @@
 package com.aicodinator.backend.domain.report.domain.entity;
 
+import com.aicodinator.backend.domain.region.domain.Region;
 import com.aicodinator.backend.domain.selfcheck.domain.entity.SelfCheck;
 import com.aicodinator.backend.domain.user.domain.entity.User;
 import com.aicodinator.backend.global.entity.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,9 +26,13 @@ public class Report extends BaseEntity {
     @JoinColumn(name = "self_check_id", unique = true)
     private SelfCheck selfCheck;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "region_id")
+    private Region region;
 
     private String title;
 
