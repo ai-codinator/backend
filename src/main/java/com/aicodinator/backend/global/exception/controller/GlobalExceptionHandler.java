@@ -50,7 +50,7 @@ public class GlobalExceptionHandler {
     ErrorCode errorCode = e.getErrorCode();
     ErrorResponse response = ErrorResponse.builder()
         .errorCode(errorCode)
-        .errorMessage(errorCode.getMessage())
+        .errorMessage(e.getMessage() == null ? errorCode.getMessage() : e.getMessage())
         .build();
 
     return ResponseEntity.status(errorCode.getHttpStatus()).body(response);
