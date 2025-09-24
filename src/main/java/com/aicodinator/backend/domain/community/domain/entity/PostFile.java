@@ -23,7 +23,7 @@ public class PostFile extends BaseEntity {
     private String originalFileName; // 사용자가 업로드한 파일의 원래 이름
 
     @Column(nullable = false)
-    private String uploadUrl; // S3에 업로드된 후 접근할 수 있는 URL
+    private String storedKey; // S3에 업로드된 키
 
     private long fileSize; // 파일 크기
 }
