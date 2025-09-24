@@ -1,4 +1,4 @@
-package com.aicodinator.backend.domain.user.service;
+package com.aicodinator.backend.global.security;
 
 import com.aicodinator.backend.domain.user.domain.constant.Role;
 import com.aicodinator.backend.domain.user.domain.constant.SocialPlatform;
