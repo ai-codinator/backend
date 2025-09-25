@@ -23,8 +23,6 @@ public class PostDetailResponse {
 
     private List<PostFileResponse> files;
 
-    private List<CommentResponse> comments;
-
     private Boolean isOwner;
 
     private LocalDateTime createdAt;
