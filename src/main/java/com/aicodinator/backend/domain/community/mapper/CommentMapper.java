@@ -13,8 +13,8 @@ import java.util.List;
 public interface CommentMapper {
     @Mapping(source = "id", target = "commentId")
     @Mapping(source = "user.name", target = "authorName")
-    @Mapping(target = "isOwner", expression = "java(comment.getUser().equals(currentUser))")
+    @Mapping(target = "isOwner", expression = "java(comment.getUser().getId().equals(currentUser.getId()))")
     CommentResponse toCommentResponse(Comment comment, @Context User currentUser);
 
-    List<CommentResponse> toCommentResponseList(List<Comment> commentList);
+    List<CommentResponse> toCommentResponseList(List<Comment> commentList, @Context User currentUser);
 }

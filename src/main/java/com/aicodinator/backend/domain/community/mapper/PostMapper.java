@@ -13,12 +13,12 @@ import java.util.List;
 
 @Mapper(
     componentModel = "spring",
-    uses = {PostFileMapper.class, CommentMapper.class}
+    uses = {PostFileMapper.class}
 )
 public interface PostMapper {
     @Mapping(source = "id", target = "postId")
     @Mapping(source = "user.name", target = "authorName")
-    @Mapping(target = "isOwner", expression = "java(post.getUser().equals(currentUser))")
+    @Mapping(target = "isOwner", expression = "java(post.getUser().getId().equals(currentUser.getId()))")
     PostDetailResponse toPostDetailResponse(Post post, @Context User currentUser);
 
     @Mapping(source = "id", target = "postId")
