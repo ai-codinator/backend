@@ -4,7 +4,7 @@ import com.aicodinator.backend.domain.community.domain.dto.request.CommentEditRe
 import com.aicodinator.backend.domain.community.domain.dto.request.CommentRequest;
 import com.aicodinator.backend.domain.community.domain.dto.response.CommentResponse;
 import com.aicodinator.backend.domain.community.service.CommentService;
-import com.aicodinator.backend.domain.user.domain.entity.User;
+import com.aicodinator.backend.global.security.CustomOAuth2User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,27 +20,25 @@ public class CommentController {
     private final CommentService commentService;
 
     @GetMapping("/posts/{postId}/comments")
-    public ResponseEntity<List<CommentResponse>> getComments(@PathVariable Long postId) {
-        return ResponseEntity.ok(commentService.getCommentsByPostId(postId));
+    public ResponseEntity<List<CommentResponse>> getComments(@PathVariable Long postId, @AuthenticationPrincipal CustomOAuth2User oAuth2User) {
+        return ResponseEntity.ok(commentService.getCommentsByPostId(postId, oAuth2User.getUser()));
     }
 
     @PostMapping("/comments")
-    public ResponseEntity<CommentResponse> createComment(@RequestBody CommentRequest request, @AuthenticationPrincipal User user) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createComment(request,user));
+    public ResponseEntity<CommentResponse> createComment(@RequestBody CommentRequest request, @AuthenticationPrincipal CustomOAuth2User oAuth2User) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createComment(request, oAuth2User.getUser()));
     }
 
     @PutMapping("/comments/{commentId}")
     public ResponseEntity<CommentResponse> updateComment(@PathVariable Long commentId,
                                               @RequestBody CommentEditRequest request,
-                                              @AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(commentService.updateComment(commentId, request, user));
+                                              @AuthenticationPrincipal CustomOAuth2User oAuth2User) {
+        return ResponseEntity.ok(commentService.updateComment(commentId, request, oAuth2User.getUser()));
     }
 
     @DeleteMapping("comments/{commentId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId, @AuthenticationPrincipal User user) {
-        commentService.deleteComment(commentId, user);
+    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId, @AuthenticationPrincipal CustomOAuth2User oAuth2User) {
+        commentService.deleteComment(commentId, oAuth2User.getUser());
         return ResponseEntity.noContent().build();
     }
-
-    // TODO: CustomOAuth2UserPrincipal로 변경
 }
