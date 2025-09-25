@@ -1,7 +1,7 @@
 package com.aicodinator.backend.domain.community.repository;
 
 import com.aicodinator.backend.domain.community.domain.entity.Board;
-import com.aicodinator.backend.domain.region.domain.Region;
+import com.aicodinator.backend.domain.region.domain.entity.Region;
 import com.aicodinator.backend.domain.user.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

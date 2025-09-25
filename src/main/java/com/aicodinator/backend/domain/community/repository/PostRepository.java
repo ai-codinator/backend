@@ -2,7 +2,7 @@ package com.aicodinator.backend.domain.community.repository;
 
 import com.aicodinator.backend.domain.community.domain.entity.Board;
 import com.aicodinator.backend.domain.community.domain.entity.Post;
-import com.aicodinator.backend.domain.region.domain.Region;
+import com.aicodinator.backend.domain.region.domain.entity.Region;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,8 +26,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT p FROM Post p " +
         "LEFT JOIN FETCH p.user " +
         "LEFT JOIN FETCH p.files " +
-        "LEFT JOIN FETCH p.comments c " +
-        "LEFT JOIN FETCH c.user " +
         "WHERE p.id = :postId")
     Optional<Post> findByIdWithDetails(@Param("postId") Long postId);
 
