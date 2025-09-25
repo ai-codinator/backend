@@ -76,8 +76,9 @@ public class CustomOAuth2UserService
                     return userRepository.save(u);
                 });
 
-        // 세션에 저장될 DefaultOAuth2User 반환
-        return new DefaultOAuth2User(
+        // CustomOAuth2User 반환
+        return new CustomOAuth2User(
+                user,
                 Collections.singleton(new SimpleGrantedAuthority("ROLE_" + user.getRole())),
                 attributes,
                 userInfo.getNameAttributeKey()
