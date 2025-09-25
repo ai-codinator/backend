@@ -1,4 +1,4 @@
-package com.aicodinator.backend.domain.region.domain;
+package com.aicodinator.backend.domain.region.domain.entity;
 
 import com.aicodinator.backend.global.entity.BaseEntity;
 import jakarta.persistence.Entity;
