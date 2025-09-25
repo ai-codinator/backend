@@ -24,8 +24,8 @@ public class CommentService {
     private final CommentMapper commentMapper;
 
     @Transactional(readOnly = true)
-    public List<CommentResponse> getCommentsByPostId(Long postId) {
-        return commentMapper.toCommentResponseList(commentRepository.findAllByPostIdOrderByCreatedAtAsc(postId));
+    public List<CommentResponse> getCommentsByPostId(Long postId, User user) {
+        return commentMapper.toCommentResponseList(commentRepository.findAllByPostIdOrderByCreatedAtAsc(postId), user);
     }
 
     @Transactional
@@ -57,7 +57,7 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND, "요청하신 댓글을 찾을 수 없습니다."));
 
-        if (!user.equals(comment.getUser())) {
+        if (!user.getId().equals(comment.getUser().getId())) {
             throw new CustomException(ErrorCode.FORBIDDEN, "해당 댓글에 대한 권한이 없습니다.");
         }
 

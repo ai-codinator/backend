@@ -11,9 +11,10 @@ import com.aicodinator.backend.domain.community.domain.entity.Post;
 import com.aicodinator.backend.domain.community.domain.entity.PostFile;
 import com.aicodinator.backend.domain.community.domain.entity.PostLike;
 import com.aicodinator.backend.domain.community.mapper.PostMapper;
+import com.aicodinator.backend.domain.community.repository.PostFileRepository;
 import com.aicodinator.backend.domain.community.repository.PostLikeRepository;
 import com.aicodinator.backend.domain.community.repository.PostRepository;
-import com.aicodinator.backend.domain.region.domain.Region;
+import com.aicodinator.backend.domain.region.domain.entity.Region;
 import com.aicodinator.backend.domain.region.service.RegionService;
 import com.aicodinator.backend.domain.user.domain.entity.User;
 import com.aicodinator.backend.global.exception.CustomException;
@@ -38,6 +39,7 @@ public class PostService {
     private final FileValidator fileValidator;
     private final RegionService regionService;
     private final PostLikeRepository postLikeRepository;
+    private final PostFileRepository postFileRepository;
 
     @Transactional(readOnly = true)
     public Post findById(long id) {
@@ -155,7 +157,7 @@ public class PostService {
     private Post findPostAndValidate(Long postId, User user) {
         Post post = findById(postId);
 
-        if (!user.equals(post.getUser())) {
+        if (!user.getId().equals(post.getUser().getId())) {
             throw new CustomException(ErrorCode.FORBIDDEN, "요청하신 게시글에 대한 권한이 없습니다.");
         }
 
@@ -176,14 +178,15 @@ public class PostService {
                 post.addFile(postFile);
             }
         }
+        postFileRepository.saveAll(post.getFiles());
     }
 
     private void deleteFiles(List<PostFile> files, Post post) {
         if (!files.isEmpty()) {
             for (PostFile file : files) {
                 s3Uploader.delete(file.getStoredKey());
-                post.getFiles().remove(file);
             }
         }
+        post.getFiles().removeAll(files);
     }
 }
