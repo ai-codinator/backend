@@ -1,7 +1,7 @@
 package com.aicodinator.backend.domain.community.domain.entity;
 
 import com.aicodinator.backend.domain.community.domain.constant.BoardType;
-import com.aicodinator.backend.domain.region.domain.Region;
+import com.aicodinator.backend.domain.region.domain.entity.Region;
 import com.aicodinator.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
