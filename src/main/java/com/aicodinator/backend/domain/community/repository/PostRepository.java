@@ -51,4 +51,18 @@ public interface PostRepository extends JpaRepository<Post, Long> {
      */
     @Query("SELECT c.post FROM Comment c WHERE c.post.region = :region GROUP BY c.post ORDER BY MAX(c.createdAt) DESC")
     List<Post> findTop3LatestCommentedPosts(@Param("region") Region region, Pageable pageable);
+
+    /**
+     * 게시글 검색
+     */
+    @Query("SELECT p FROM Post p " +
+        "WHERE (:regionId IS NULL OR p.board.region.id = :regionId) " +
+        "AND (:boardId IS NULL OR p.board.id = :boardId) " +
+        "AND (:keyword IS NULL OR LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+        "OR LOWER(p.content) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
+        "ORDER BY p.createdAt DESC")
+    Page<Post> searchPosts(@Param("regionId") Long regionId,
+                           @Param("boardId") Long boardId,
+                           @Param("keyword") String keyword,
+                           Pageable pageable);
 }

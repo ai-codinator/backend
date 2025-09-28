@@ -2,6 +2,7 @@ package com.aicodinator.backend.domain.community.controller;
 
 import com.aicodinator.backend.domain.community.domain.dto.request.PostEditRequest;
 import com.aicodinator.backend.domain.community.domain.dto.request.PostRequest;
+import com.aicodinator.backend.domain.community.domain.dto.request.PostSearchRequest;
 import com.aicodinator.backend.domain.community.domain.dto.response.MainPageResponse;
 import com.aicodinator.backend.domain.community.domain.dto.response.PostDetailResponse;
 import com.aicodinator.backend.domain.community.domain.dto.response.PostListResponse;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -55,6 +57,14 @@ public class PostController {
     @GetMapping("/posts/{postId}")
     public ResponseEntity<PostDetailResponse> getPostDetail(@PathVariable Long postId, @AuthenticationPrincipal CustomOAuth2User oAuth2User) {
         return ResponseEntity.ok(postService.getPostDetail(postId, oAuth2User.getUser()));
+    }
+
+    /**
+     * 게시글 검색
+     */
+    @GetMapping("/posts/search")
+    public ResponseEntity<Page<PostListResponse>> getPostDetail(@ParameterObject PostSearchRequest request) {
+        return ResponseEntity.ok(postService.searchPosts(request));
     }
 
     /**

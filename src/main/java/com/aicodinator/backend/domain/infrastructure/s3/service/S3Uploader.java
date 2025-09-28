@@ -1,7 +1,7 @@
-package com.aicodinator.backend.domain.community.service;
+package com.aicodinator.backend.domain.infrastructure.s3.service;
 
-import com.aicodinator.backend.domain.community.domain.constant.FileExtension;
-import com.aicodinator.backend.domain.community.domain.constant.UploadType;
+import com.aicodinator.backend.domain.infrastructure.s3.domain.constant.FileExtension;
+import com.aicodinator.backend.domain.infrastructure.s3.domain.constant.UploadType;
 import com.aicodinator.backend.global.exception.CustomException;
 import com.aicodinator.backend.global.exception.ErrorCode;
 import com.amazonaws.AmazonClientException;

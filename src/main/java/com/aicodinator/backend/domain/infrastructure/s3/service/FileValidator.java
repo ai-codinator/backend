@@ -1,4 +1,4 @@
-package com.aicodinator.backend.domain.community.service;
+package com.aicodinator.backend.domain.infrastructure.s3.service;
 
 import com.aicodinator.backend.global.exception.CustomException;
 import com.aicodinator.backend.global.exception.ErrorCode;
