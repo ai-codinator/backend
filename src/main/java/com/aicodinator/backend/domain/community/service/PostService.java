@@ -1,6 +1,6 @@
 package com.aicodinator.backend.domain.community.service;
 
-import com.aicodinator.backend.domain.community.domain.constant.UploadType;
+import com.aicodinator.backend.domain.infrastructure.s3.domain.constant.UploadType;
 import com.aicodinator.backend.domain.community.domain.dto.request.PostEditRequest;
 import com.aicodinator.backend.domain.community.domain.dto.request.PostRequest;
 import com.aicodinator.backend.domain.community.domain.dto.response.MainPageResponse;
@@ -14,6 +14,8 @@ import com.aicodinator.backend.domain.community.mapper.PostMapper;
 import com.aicodinator.backend.domain.community.repository.PostFileRepository;
 import com.aicodinator.backend.domain.community.repository.PostLikeRepository;
 import com.aicodinator.backend.domain.community.repository.PostRepository;
+import com.aicodinator.backend.domain.infrastructure.s3.service.FileValidator;
+import com.aicodinator.backend.domain.infrastructure.s3.service.S3Uploader;
 import com.aicodinator.backend.domain.region.domain.entity.Region;
 import com.aicodinator.backend.domain.region.service.RegionService;
 import com.aicodinator.backend.domain.user.domain.entity.User;
