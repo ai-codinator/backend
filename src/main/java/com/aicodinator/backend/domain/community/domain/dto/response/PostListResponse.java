@@ -19,4 +19,6 @@ public class PostListResponse {
     private long likeCount;
 
     private int commentCount;
+
+    private PostFileResponse file;
 }
