@@ -1,5 +1,6 @@
 package com.aicodinator.backend.domain.community.service;
 
+import com.aicodinator.backend.domain.community.domain.dto.request.PostSearchRequest;
 import com.aicodinator.backend.domain.infrastructure.s3.domain.constant.UploadType;
 import com.aicodinator.backend.domain.community.domain.dto.request.PostEditRequest;
 import com.aicodinator.backend.domain.community.domain.dto.request.PostRequest;
@@ -81,6 +82,15 @@ public class PostService {
             .latestCommentPosts(postMapper.toPostListResponseList(latestCommentedPosts))
             .mostCommentedPosts(postMapper.toPostListResponseList(mostCommentedPosts))
             .build();
+    }
+
+    public Page<PostListResponse> searchPosts(PostSearchRequest request) {
+        return postRepository.searchPosts(
+            request.getRegionId(),
+            request.getBoardId(),
+            request.getKeyword(),
+            request.toPageable()
+        ).map(postMapper::toPostListResponse);
     }
 
     @Transactional
