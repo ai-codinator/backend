@@ -38,3 +38,8 @@ out/
 
 ### Application.yml ###
 application-*.yml
+
+### SQL Files ###
+*.sql
+src/main/resources/*.sql
+src/test/resources/*.sql

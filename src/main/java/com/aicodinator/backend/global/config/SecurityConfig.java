@@ -49,7 +49,8 @@ public class SecurityConfig {
                                 "/swagger-resources/**",
                                 "/webjars/**",
                                 "/actuator/health",
-                                "/h2-console/**"
+                                "/h2-console/**",
+                                "/api/codes/**"
                         ).permitAll()
 
                         // OAuth2 로그인 관련 경로
