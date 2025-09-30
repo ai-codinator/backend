@@ -43,3 +43,6 @@ application-*.yml
 *.sql
 src/main/resources/*.sql
 src/test/resources/*.sql
+
+### Documentation ###
+CLAUDE.md
