@@ -7,10 +7,9 @@ import lombok.*;
 @Entity
 @Table(name = "subsidies")
 @Getter
-@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class Subsidy extends BaseEntity {
     
     @Id

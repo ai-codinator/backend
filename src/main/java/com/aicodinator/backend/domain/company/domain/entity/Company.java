@@ -8,10 +8,9 @@ import lombok.*;
 @Entity
 @Table(name = "companies")
 @Getter
-@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class Company extends BaseEntity {
     
     @Id

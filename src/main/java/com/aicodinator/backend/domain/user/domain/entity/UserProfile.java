@@ -11,10 +11,9 @@ import java.util.Map;
 @Entity
 @Table(name = "user_profiles")
 @Getter
-@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class UserProfile extends BaseEntity {
     
     @Id

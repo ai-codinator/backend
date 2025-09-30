@@ -7,10 +7,9 @@ import lombok.*;
 @Entity
 @Table(name = "youth_policies")
 @Getter
-@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class YouthPolicy extends BaseEntity {
     
     @Id
