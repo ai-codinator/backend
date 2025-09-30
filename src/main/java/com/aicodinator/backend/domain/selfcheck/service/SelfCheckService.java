@@ -48,6 +48,10 @@ public class SelfCheckService {
                 .build();
 
         SelfCheck savedSelfCheck = selfCheckRepository.save(selfCheck);
+
+        // User 엔티티에 surveyId 업데이트 (설문조사 완료 표시)
+        user.setSurveyId(savedSelfCheck.getId());
+
         return convertToDto(savedSelfCheck);
     }
 
@@ -102,6 +106,9 @@ public class SelfCheckService {
                 .orElseThrow(() -> new CustomException(ErrorCode.RESOURCE_NOT_FOUND));
 
         selfCheckRepository.delete(selfCheck);
+
+        // User 엔티티의 surveyId를 null로 업데이트 (설문조사 미완료 상태로 변경)
+        user.setSurveyId(null);
     }
 
     /**

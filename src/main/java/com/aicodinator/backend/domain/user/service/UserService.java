@@ -1,5 +1,6 @@
 package com.aicodinator.backend.domain.user.service;
 
+import com.aicodinator.backend.domain.selfcheck.repository.SelfCheckRepository;
 import com.aicodinator.backend.domain.user.domain.dto.UserInfoDto;
 import com.aicodinator.backend.domain.user.domain.entity.User;
 import com.aicodinator.backend.domain.user.repository.UserRepository;
@@ -16,6 +17,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final AuthService authService;
+    private final SelfCheckRepository selfCheckRepository;
 
     /**
      * 현재 로그인된 사용자의 프로필 정보 조회 (마이페이지용)
@@ -66,9 +68,12 @@ public class UserService {
     }
 
     /**
-     * User 엔티티를 UserInfoDto로 변환
+     * User 엔티티를 UserInfoDto로 변환 (설문조사 완료 여부 포함)
      */
     private UserInfoDto convertToUserInfoDto(User user) {
+        // SelfCheck 테이블에서 해당 사용자의 설문조사 데이터 존재 여부 확인
+        boolean hasSurvey = selfCheckRepository.findByUser(user).isPresent();
+
         return UserInfoDto.builder()
                 .id(user.getId())
                 .email(user.getEmail())
@@ -76,6 +81,8 @@ public class UserService {
                 .socialPlatform(user.getSocialPlatform())
                 .role(user.getRole())
                 .active(user.isActive())
+                .surveyId(user.getSurveyId())
+                .hasSurvey(hasSurvey)  // 설문조사 완료 여부
                 .build();
     }
 }

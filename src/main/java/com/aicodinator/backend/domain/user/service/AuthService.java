@@ -1,5 +1,6 @@
 package com.aicodinator.backend.domain.user.service;
 
+import com.aicodinator.backend.domain.selfcheck.repository.SelfCheckRepository;
 import com.aicodinator.backend.domain.user.domain.dto.AuthResponseDto;
 import com.aicodinator.backend.domain.user.domain.dto.UserInfoDto;
 import com.aicodinator.backend.domain.user.domain.entity.User;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final SelfCheckRepository selfCheckRepository;
 
     /**
      * 현재 인증된 사용자 정보 조회
@@ -31,6 +33,7 @@ public class AuthService {
             return AuthResponseDto.builder()
                     .authenticated(false)
                     .message("인증되지 않은 사용자입니다.")
+                    .surveyCompleted(false)
                     .build();
         }
 
@@ -41,6 +44,9 @@ public class AuthService {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
+            // 설문조사 완료 여부 확인
+            boolean hasSurvey = selfCheckRepository.findByUser(user).isPresent();
+
             UserInfoDto userInfoDto = UserInfoDto.builder()
                     .id(user.getId())
                     .email(user.getEmail())
@@ -48,18 +54,22 @@ public class AuthService {
                     .socialPlatform(user.getSocialPlatform())
                     .role(user.getRole())
                     .active(user.isActive())
+                    .surveyId(user.getSurveyId())
+                    .hasSurvey(hasSurvey)
                     .build();
 
             return AuthResponseDto.builder()
                     .authenticated(true)
                     .user(userInfoDto)
                     .message("인증된 사용자입니다.")
+                    .surveyCompleted(hasSurvey)
                     .build();
 
         } catch (Exception e) {
             return AuthResponseDto.builder()
                     .authenticated(false)
                     .message("사용자 정보를 가져올 수 없습니다.")
+                    .surveyCompleted(false)
                     .build();
         }
     }

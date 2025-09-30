@@ -18,4 +18,8 @@ public class UserInfoDto {
     private SocialPlatform socialPlatform;
     private Role role;
     private boolean active;
+
+    // 설문조사 관련 정보
+    private Long surveyId;
+    private boolean hasSurvey;  // 설문조사 완료 여부
 }

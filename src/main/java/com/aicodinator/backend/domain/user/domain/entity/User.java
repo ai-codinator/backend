@@ -39,4 +39,7 @@ public class User extends BaseEntity {
     private Role role;
 
     private boolean active;
+
+    // 설문조사 ID (설문조사 완료 시 저장)
+    private Long surveyId;
 }
