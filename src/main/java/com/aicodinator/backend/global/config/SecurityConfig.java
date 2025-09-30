@@ -23,10 +23,18 @@ public class SecurityConfig {
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable())
 
+                // 세션 설정
+                .sessionManagement(session -> session
+                        .maximumSessions(1) // 동시 세션 1개로 제한
+                        .maxSessionsPreventsLogin(false) // 새 로그인이 기존 세션을 만료시킴
+                )
+
                 // 인가 설정
                 .authorizeHttpRequests(auth -> auth
-                        // swagger, actuator 등 퍼밋
+                        // 인증 없이 접근 가능한 경로
                         .requestMatchers(
+                                "/",
+                                "/api/auth/oauth2/urls",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
@@ -34,31 +42,37 @@ public class SecurityConfig {
                                 "/webjars/**",
                                 "/actuator/health"
                         ).permitAll()
-                        // OAuth2 로그인 시작 및 콜백 URL 퍼밋
+
+                        // OAuth2 로그인 관련 경로
                         .requestMatchers(
                                 "/oauth2/authorization/**",
                                 "/login/oauth2/**"
                         ).permitAll()
-                        // ADMIN API
+
+                        // 관리자 API
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
+
                         // 그 외는 인증 필요
                         .anyRequest().authenticated()
                 )
 
                 // OAuth2 로그인 설정
                 .oauth2Login(oauth2 -> oauth2
-                        // (선택) 커스텀 로그인 페이지를 쓴다면 지정
-                        // .loginPage("/login")
-
-                        // 소셜 로그인 후 사용자 정보 처리 서비스 연결
-                        .userInfoEndpoint(userInfo ->
-                                userInfo.userService(oAuth2UserService)
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(oAuth2UserService)
                         )
-                        // 로그인 성공 시 리다이렉트 URL (true: 항상 리다이렉트)
-                        .defaultSuccessUrl("/dashboard", true)
+                        .defaultSuccessUrl("/api/auth/success", true)
+                        .failureUrl("/api/auth/failure")
+                )
+
+                // 로그아웃 설정
+                .logout(logout -> logout
+                        .logoutUrl("/api/auth/logout")
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
                 );
 
         return http.build();
     }
 }
-

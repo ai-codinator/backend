@@ -9,8 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findBySocialPlatformAndSocialLoginId(
-            SocialPlatform socialPlatform,
-            String socialLoginId
-    );
+    Optional<User> findBySocialLoginIdAndSocialPlatform(String socialLoginId, SocialPlatform socialPlatform);
+    Optional<User> findByEmail(String email);
 }
