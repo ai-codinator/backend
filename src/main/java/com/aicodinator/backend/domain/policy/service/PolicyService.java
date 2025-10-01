@@ -71,8 +71,8 @@ public class PolicyService {
     // ===== Subsidy 관련 메서드 =====
     
     // 보조금 단건 조회
-    public Optional<Subsidy> findSubsidyById(String serviceId) {
-        return subsidyRepository.findById(serviceId);
+    public Optional<Subsidy> findSubsidyById(Long id) {
+        return subsidyRepository.findById(id);
     }
     
     // 보조금 전체 조회
@@ -82,37 +82,37 @@ public class PolicyService {
     
     // 지역별 보조금 조회
     public List<Subsidy> findSubsidiesByRegion(String region) {
-        return subsidyRepository.findByRegion(region);
+        return subsidyRepository.findByTargetRegion(region);
     }
     
-    // 기관별 보조금 조회
-    public List<Subsidy> findSubsidiesByOrganization(String organization) {
-        return subsidyRepository.findByOrganization(organization);
+    // 유형별 보조금 조회
+    public List<Subsidy> findSubsidiesByType(String type) {
+        return subsidyRepository.findBySubsidyType(type);
     }
     
-    // 서비스명으로 보조금 검색
+    // 보조금명으로 검색
     public List<Subsidy> searchSubsidies(String keyword) {
-        return subsidyRepository.findByServiceNameContaining(keyword);
+        return subsidyRepository.findBySubsidyNameContaining(keyword);
     }
     
-    // 지원 대상으로 보조금 검색
-    public List<Subsidy> findSubsidiesByTarget(String targetKeyword) {
-        return subsidyRepository.findBySupportTargetContaining(targetKeyword);
+    // 자격 조건으로 보조금 검색
+    public List<Subsidy> findSubsidiesByEligibility(String keyword) {
+        return subsidyRepository.findByEligibilityContaining(keyword);
     }
     
     // ID 목록으로 보조금 조회
-    public List<Subsidy> findSubsidiesByIds(List<String> serviceIds) {
-        return subsidyRepository.findByServiceIdIn(serviceIds);
+    public List<Subsidy> findSubsidiesByIds(List<Long> ids) {
+        return subsidyRepository.findByIdIn(ids);
     }
     
     // 페이징 처리된 지역별 보조금 조회
     public Page<Subsidy> findSubsidiesByRegionWithPaging(String region, Pageable pageable) {
-        return subsidyRepository.findByRegion(region, pageable);
+        return subsidyRepository.findByTargetRegion(region, pageable);
     }
     
     // 지역별 보조금 개수
     public Long countSubsidiesByRegion(String region) {
-        return subsidyRepository.countByRegion(region);
+        return subsidyRepository.countByTargetRegion(region);
     }
     
     // ===== 통합 조회 메서드 =====
@@ -128,11 +128,11 @@ public class PolicyService {
             
         // 보조금 조회
         List<Subsidy> subsidies = targetKeyword != null
-            ? subsidyRepository.findBySupportTargetContaining(targetKeyword)
+            ? subsidyRepository.findByEligibilityContaining(targetKeyword)
                 .stream()
-                .filter(s -> s.getRegion().equals(region))
+                .filter(s -> s.getTargetRegion().equals(region))
                 .collect(Collectors.toList())
-            : subsidyRepository.findByRegion(region);
+            : subsidyRepository.findByTargetRegion(region);
             
         result.put("youthPolicies", policies);
         result.put("subsidies", subsidies);
@@ -157,7 +157,7 @@ public class PolicyService {
     }
     
     @Transactional
-    public void deleteSubsidy(String serviceId) {
-        subsidyRepository.deleteById(serviceId);
+    public void deleteSubsidy(Long id) {
+        subsidyRepository.deleteById(id);
     }
 }

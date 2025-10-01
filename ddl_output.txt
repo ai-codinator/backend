@@ -1,0 +1,50 @@
+    create table Board (
+    create table code (
+    create table Comment (
+    create table companies (
+    create table housings (
+    create table Post (
+    create table PostFile (
+    create table PostLike (
+    create table RefreshToken (
+    create table Region (
+    create table Report (
+    create table report_recommended_companies (
+    create table report_recommended_housings (
+    create table report_recommended_policies (
+    create table report_recommended_subsidies (
+    create table SelfCheck (
+    create table subsidies (
+    create table user_profiles (
+    create table UserRegion (
+    create table users (
+    create table youth_policies (
+    alter table if exists Board 
+       foreign key (region_id) 
+    alter table if exists Comment 
+       foreign key (post_id) 
+    alter table if exists Comment 
+       foreign key (user_id) 
+    alter table if exists companies 
+       foreign key (region_id) 
+    alter table if exists housings 
+       foreign key (region_id) 
+    alter table if exists Post 
+       foreign key (board_id) 
+    alter table if exists Post 
+       foreign key (region_id) 
+    alter table if exists Post 
+       foreign key (user_id) 
+    alter table if exists PostFile 
+       foreign key (post_id) 
+    alter table if exists PostLike 
+       foreign key (post_id) 
+    alter table if exists PostLike 
+       foreign key (user_id) 
+    alter table if exists RefreshToken 
+       foreign key (user_id) 
+    alter table if exists Report 
+       foreign key (region_id) 
+    alter table if exists Report 
+       foreign key (self_check_id) 
+    alter table if exists Report 

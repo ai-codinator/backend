@@ -82,10 +82,10 @@ public class PolicyController {
     
     // ===== 보조금 API =====
     
-    @GetMapping("/subsidy/{serviceId}")
-    @Operation(summary = "보조금 단건 조회", description = "서비스 ID로 보조금을 조회합니다")
-    public ResponseEntity<Subsidy> getSubsidy(@PathVariable String serviceId) {
-        return policyService.findSubsidyById(serviceId)
+    @GetMapping("/subsidy/{id}")
+    @Operation(summary = "보조금 단건 조회", description = "ID로 보조금을 조회합니다")
+    public ResponseEntity<Subsidy> getSubsidy(@PathVariable Long id) {
+        return policyService.findSubsidyById(id)
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
     }
@@ -94,18 +94,18 @@ public class PolicyController {
     @Operation(summary = "보조금 목록 조회", description = "조건에 맞는 보조금 목록을 조회합니다")
     public ResponseEntity<List<Subsidy>> getSubsidies(
             @Parameter(description = "지역") @RequestParam(required = false) String region,
-            @Parameter(description = "기관") @RequestParam(required = false) String organization,
-            @Parameter(description = "대상 키워드") @RequestParam(required = false) String targetKeyword,
+            @Parameter(description = "보조금 유형") @RequestParam(required = false) String type,
+            @Parameter(description = "자격 키워드") @RequestParam(required = false) String eligibilityKeyword,
             @Parameter(description = "검색 키워드") @RequestParam(required = false) String keyword) {
         
         List<Subsidy> subsidies;
         
         if (region != null) {
             subsidies = policyService.findSubsidiesByRegion(region);
-        } else if (organization != null) {
-            subsidies = policyService.findSubsidiesByOrganization(organization);
-        } else if (targetKeyword != null) {
-            subsidies = policyService.findSubsidiesByTarget(targetKeyword);
+        } else if (type != null) {
+            subsidies = policyService.findSubsidiesByType(type);
+        } else if (eligibilityKeyword != null) {
+            subsidies = policyService.findSubsidiesByEligibility(eligibilityKeyword);
         } else if (keyword != null) {
             subsidies = policyService.searchSubsidies(keyword);
         } else {
@@ -118,7 +118,7 @@ public class PolicyController {
     @GetMapping("/subsidies/batch")
     @Operation(summary = "보조금 일괄 조회", description = "ID 목록으로 여러 보조금을 한번에 조회합니다")
     public ResponseEntity<List<Subsidy>> getSubsidiesByIds(
-            @Parameter(description = "서비스 ID 목록") @RequestParam List<String> ids) {
+            @Parameter(description = "ID 목록") @RequestParam List<Long> ids) {
         
         List<Subsidy> subsidies = policyService.findSubsidiesByIds(ids);
         return ResponseEntity.ok(subsidies);

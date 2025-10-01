@@ -36,6 +36,6 @@ public class Company extends BaseEntity {
     private String description;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "region_id")
+    @JoinColumn(name = "region_id", nullable = true)
     private Region region;
 }
