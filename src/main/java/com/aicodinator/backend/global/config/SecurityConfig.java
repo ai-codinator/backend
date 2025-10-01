@@ -59,6 +59,17 @@ public class SecurityConfig {
                                 "/login/oauth2/**"
                         ).permitAll()
 
+                        // Python AI 서버용 API (인증 불필요)
+                        .requestMatchers(
+                                "/api/users/*/self-check",
+                                "/api/users/*/profile",
+                                "/api/housings/**",
+                                "/api/companies/**",
+                                "/api/policies/**",
+                                "/api/reports/**",
+                                "/api/regions/**"
+                        ).permitAll()
+
                         // 관리자 API
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
